@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Chess Practice - Improve Your Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-chess"></i> Advanced Chess Practice</h1>
+                <p>Master chess with AI opponents, analysis, and practice tools</p>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <div class="main-content">
+            <!-- Left Panel - Game Setup & Controls -->
+            <div class="left-panel">
+                <div class="game-setup">
+                    <h3><i class="fas fa-cog"></i> Game Setup</h3>
+                    
+                    <div class="setup-group">
+                        <label>Game Mode:</label>
+                        <select id="game-mode">
+                            <option value="ai">vs AI</option>
+                            <option value="analysis">Analysis Mode</option>
+                        </select>
+                    </div>
+
+                    <div class="setup-group">
+                        <label>AI Difficulty:</label>
+                        <select id="difficulty">
+                            <option value="easy">Easy (Beginner)</option>
+                            <option value="medium" selected>Medium (Intermediate)</option>
+                            <option value="hard">Hard (Advanced)</option>
+                            <option value="gemini">Gemini (AI)</option>
+                        </select>
+                    </div>
+
+                    <div class="setup-group">
+                        <label>Your Color:</label>
+                        <select id="player-color">
+                            <option value="white" selected>White</option>
+                            <option value="black">Black</option>
+                        </select>
+                    </div>
+
+                    <button id="new-game-btn" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Start New Game
+                    </button>
+                </div>
+
+                <!-- Game Controls -->
+                <div class="game-controls">
+                    <h3><i class="fas fa-gamepad"></i> Game Controls</h3>
+                    
+                    <button id="hint-btn" class="btn btn-secondary">
+                        <i class="fas fa-lightbulb"></i> Get Hint (<span id="hints-remaining">3</span>)
+                    </button>
+                    
+                    <button id="analysis-btn" class="btn btn-secondary">
+                        <i class="fas fa-chart-line"></i> Position Analysis
+                    </button>
+                    
+                    <button id="undo-btn" class="btn btn-secondary">
+                        <i class="fas fa-undo"></i> Undo Move
+                    </button>
+                    
+                    <button id="resign-btn" class="btn btn-danger">
+                        <i class="fas fa-flag"></i> Resign
+                    </button>
+                </div>
+
+                <!-- Game Statistics -->
+                <div class="game-stats">
+                    <h3><i class="fas fa-chart-bar"></i> Game Stats</h3>
+                    <div class="stat-item">
+                        <span>Moves:</span>
+                        <span id="move-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Time:</span>
+                        <span id="game-time">00:00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Material:</span>
+                        <span id="material-balance">Equal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Panel - Chess Board -->
+            <div class="center-panel">
+                <div class="game-status">
+                    <div id="current-turn" class="turn-indicator">
+                        <i class="fas fa-chess-pawn"></i>
+                        <span>White to move</span>
+                    </div>
+                    <div id="game-result" class="game-result hidden"></div>
+                </div>
+
+                <div class="board-container">
+                    <div class="board-wrapper">
+                        <div id="chess-board" class="chess-board"></div>
+                        <div class="coordinates">
+                            <div class="files">
+                                <span>a</span><span>b</span><span>c</span><span>d</span>
+                                <span>e</span><span>f</span><span>g</span><span>h</span>
+                            </div>
+                            <div class="ranks">
+                                <span>8</span><span>7</span><span>6</span><span>5</span>
+                                <span>4</span><span>3</span><span>2</span><span>1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Move Input -->
+                <div class="move-input">
+                    <input type="text" id="move-input" placeholder="Enter move (e.g., e2e4)" maxlength="5">
+                    <button id="make-move-btn" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i> Move
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel - Analysis & History -->
+            <div class="right-panel">
+                <!-- Position Analysis -->
+                <div class="analysis-panel">
+                    <h3><i class="fas fa-microscope"></i> Position Analysis</h3>
+                    <div id="analysis-content">
+                        <div class="analysis-item">
+                            <span>Material Balance:</span>
+                            <span id="analysis-material">0</span>
+                        </div>
+                        <div class="analysis-item">
+                            <span>Center Control:</span>
+                            <span id="analysis-center">0</span>
+                        </div>
+                        <div class="suggestions">
+                            <h4>Suggestions:</h4>
+                            <ul id="suggestions-list"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Move History -->
+                <div class="move-history">
+                    <h3><i class="fas fa-history"></i> Move History</h3>
+                    <div id="moves-list" class="moves-container"></div>
+                </div>
+
+                <!-- Learning Tips -->
+                <div class="learning-tips">
+                    <h3><i class="fas fa-graduation-cap"></i> Chess Tips</h3>
+                    <div id="chess-tips">
+                        <div class="tip">
+                            <strong>Opening Principles:</strong>
+                            <ul>
+                                <li>Control the center</li>
+                                <li>Develop pieces quickly</li>
+                                <li>Castle early for king safety</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-chess-knight fa-spin"></i>
+            <p>AI is thinking...</p>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="game-over-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="game-over-title">Game Over</h2>
+            <p id="game-over-message"></p>
+            <div class="modal-actions">
+                <button id="new-game-modal-btn" class="btn btn-primary">New Game</button>
+                <button id="analyze-game-btn" class="btn btn-secondary">Analyze Game</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chess-app.js') }}"></script>
+</body>
+</html>
