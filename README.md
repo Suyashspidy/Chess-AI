@@ -45,3 +45,6 @@ This is a web-based chess application that allows you to play against an AI with
     python app.py
     ```
 4.  Open your browser and go to `http://127.0.0.1:5000`.
+
+License
+This project is licensed under the MIT License.
